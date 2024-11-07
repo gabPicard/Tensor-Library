@@ -107,9 +107,9 @@ class NDimensionTensor:
                 data[indexes[-1]] = data_filing[indexes[-1]]
             else:
                 data = self.tensor
-                for _ in indexes[:-1]:
+                for _ in indexes:
                     data = data[_]
-                data[indexes[-1]] = filing
+                data = filing
         else:
             for idx, item in enumerate(indexes):
                 if isinstance(item, list):
@@ -117,6 +117,7 @@ class NDimensionTensor:
                         new_indexes = indexes[:idx] + [i] + indexes[idx + 1:]
                         self.partial_filing(filing, new_indexes)
                     break
+
     
     def concatenate(self, tensor, dimension, position):
         if self.shape[:dimension] != tensor.shape[:dimension]:
@@ -127,14 +128,15 @@ class NDimensionTensor:
             raise ValueError ("Please specify a valid dimension")
         if position != "front" and position != "back":
             raise ValueError ("Please indicate clearly the point of concatenation")
-        new_shape = [self.shape[dimension]+tensor.shape[dimension] if x == self.shape[dimension] else x for x in self.shape]
+        new_shape = [self.shape[dimension]+tensor.shape[dimension] if x == dimension else y for x,y in enumerate(self.shape)]
         result = NDimensionTensor(new_shape, 0)
         if position == "back":
-            result.partial_filing(self.tensor, self.shape)
-            result.partial_filing(tensor.tensor, [x+self.shape[dimension] if x == tensor.shape[dimension] else x for x in tensor.shape])
+            result.partial_filing(self.tensor, [[0,x] for x in self.shape])
+            result.partial_filing(tensor.tensor, [[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)])
         elif position == "front":
-            result.partial_filing(tensor.tensor, tensor.shape)
-            result.partial_filing(self.tensor, [x+tensor.shape[dimension] if x == self.shape[dimension] else x for x in self.shape])
+            result.partial_filing(tensor.tensor, [[0,x] for x in tensor.shape])
+            print(result)
+            result.partial_filing(self.tensor, [[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)])
         return result
         
 
@@ -143,9 +145,4 @@ class NDimensionTensor:
 
     
     
-tensor1 = NDimensionTensor([3,3,3], 1)
-tensor2 = NDimensionTensor([3,3,3], 2)
-print(tensor1)
-print(tensor2)
-tensor3 = tensor1.concatenate(tensor2,0,"back")
-print(tensor3)
+
