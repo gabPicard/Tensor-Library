@@ -1,8 +1,11 @@
 class NDimensionTensor:
-    def __init__(self, shape, fill=None):
+    def __init__(self, shape = [], fill=0):
         self.shape = shape
-        self.tensor = self._create_tensor(shape, fill)
-    
+        if isinstance (fill, int):
+            self.tensor = self._create_tensor(shape, fill)
+        else:
+            self.tensor = fill
+
     def _create_tensor(self, shape, fill):
         if len(shape) <= 0:
             return None
@@ -12,7 +15,16 @@ class NDimensionTensor:
             return [self._create_tensor(shape[1:],fill) for _ in range(shape[0])]
     
     def __str__(self):
-        return str(self.tensor)
+        if len(self.shape) == 2:
+            line = ""
+            for x,y in enumerate(self.tensor):
+                line += ("[")
+                for j in self.tensor[x][:-1]:
+                    line += (str(j)+", ")
+                line += (str(self.tensor[x][-1])+"]\n")
+        else:
+            line = str(self.tensor)
+        return line
     
     def __getitem__(self, indexes):
         if isinstance(indexes, list):
@@ -86,6 +98,20 @@ class NDimensionTensor:
             if isinstance(n, list):
                 count += 1
         return count
+    
+    def _get_combination(self,indexes, recursive_memory = []):
+        if self._lst_nbr(indexes)< 1 and recursive_memory == [] :
+            return indexes
+        elif len(indexes) == 1:
+            if isinstance (indexes[0], list):
+                return [recursive_memory+[_] for _ in range(indexes[0][0], indexes[0][-1])]
+            else:
+                return [recursive_memory+indexes]
+        else:
+            if isinstance(indexes[0], list):
+                return[item for sublist in [self._get_combination(indexes[1:], recursive_memory+[_]) for _ in range(indexes[0][0], indexes[0][-1])] for item in sublist]
+            else:
+                return self._get_combination(indexes[1:], recursive_memory+[indexes[0]])
 
     def extract_tensor(self, indexes):
         if self._lst_nbr(indexes) == 1:
@@ -94,30 +120,42 @@ class NDimensionTensor:
             extract = []
             for _ in indexes:
                 if isinstance(_, list):
-                    return[self.extract_tensor(tuple(i if x == _ else x for x in indexes)) for i in range(_[0], _[-1])]
+                    return [self.extract_tensor(tuple(i if x == _ else x for x in indexes)) for i in range(_[0], _[-1])]
 
-    def partial_filing(self, filing, indexes):
-        if self._lst_nbr(indexes) == 0:
-            if isinstance(filing, NDimensionTensor):
+    def partial_filing(self, indexes, filing):
+        if isinstance (filing, int):
+            if self._lst_nbr(indexes) < 1:
                 data = self.tensor
-                data_filing = filing.tensor
                 for _ in indexes[:-1]:
                     data = data[_]
-                    data_filing = data_filing[_]
-                data[indexes[-1]] = data_filing[indexes[-1]]
+                data[indexes[-1]] = filing
             else:
+                indexes = self._get_combination(indexes)
+                print(indexes)
+                for i in indexes:
+                    data = self.tensor
+                    for _ in i[:-1]:
+                        data = data[_]
+                    data[i[-1]] = filing
+        elif isinstance(filing, NDimensionTensor):
+            if self._lst_nbr(indexes) < 1:
                 data = self.tensor
-                for _ in indexes:
+                for _ in indexes[:-1]:
                     data = data[_]
-                data = filing
+                data[indexes[-1]] = filing[indexes[-1]]
+            else:
+                indexes_filing = self._get_combination([[0,i] for i in filing.shape])
+                indexes = self._get_combination(indexes)
+                for i,j in zip(indexes, indexes_filing):
+                    data = self.tensor
+                    data_filing = filing.tensor
+                    for x,y in zip(i[:-1], j[:-1]):
+                        data = data[x]
+                        data_filing = data_filing[y]
+                    data[i[-1]] = data_filing[j[-1]]
         else:
-            for idx, item in enumerate(indexes):
-                if isinstance(item, list):
-                    for i in range(item[0], item[-1]):
-                        new_indexes = indexes[:idx] + [i] + indexes[idx + 1:]
-                        self.partial_filing(filing, new_indexes)
-                    break
-
+            raise ValueError("Please use only an integer or another tensor to partially fill your tensor")
+    
     
     def concatenate(self, tensor, dimension, position):
         if self.shape[:dimension] != tensor.shape[:dimension]:
@@ -129,20 +167,13 @@ class NDimensionTensor:
         if position != "front" and position != "back":
             raise ValueError ("Please indicate clearly the point of concatenation")
         new_shape = [self.shape[dimension]+tensor.shape[dimension] if x == dimension else y for x,y in enumerate(self.shape)]
+        print(new_shape)
         result = NDimensionTensor(new_shape, 0)
         if position == "back":
-            result.partial_filing(self.tensor, [[0,x] for x in self.shape])
-            result.partial_filing(tensor.tensor, [[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)])
+            result.partial_filing([[0,x] for x in self.shape], self)
+            result.partial_filing([[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)], tensor)
         elif position == "front":
-            result.partial_filing(tensor.tensor, [[0,x] for x in tensor.shape])
+            result.partial_filing([[0,x] for x in tensor.shape], tensor)
             print(result)
-            result.partial_filing(self.tensor, [[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)])
+            result.partial_filing([[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)], self)
         return result
-        
-
-    
-
-
-    
-    
-
