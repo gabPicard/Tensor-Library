@@ -106,7 +106,6 @@ third_line = matrix.extract_tensor([2,[1,3])
 > Note: You can only extract tensors. For example, if you wanted to do the opposite as before, wich would be extracting the border of the matrix instead of the inside, it wouldn't be possible: you would end up with a tensor with an empty middle
 
 #### partial_filing
-> Note: this function does not currently works with another tensor as the filing. I am working on it
 
 The *partial_filing* function allows you to set elements inside a tensor using an integer or another tensor. You basically use it the same way as the *extract_tensor* function. You call it using the indexes and the filing. 
 
@@ -124,7 +123,6 @@ matrix.partial_filing([[1,3],[1,3]],smaller_matrix)
 > Note: the specified indexes must matches with the shape of the tensor used for filling
 
 #### concatenate
-> Note: As this function uses the *partial_filing* function, it is not currently working
 
 The *concatenate* function allows use to "fuse" two tensors together. To use this function, you have to specify the second tensor, the dimension that will be expanded, and wich tensor will go in front of the other.
 
