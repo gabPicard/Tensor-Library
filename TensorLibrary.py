@@ -4,7 +4,7 @@ class NDimensionTensor:
         if isinstance (fill, int):
             self.tensor = self._create_tensor(shape, fill)
         else:
-            self.tensor = fill
+            raise ValueError ("Please only use an integer for the creation of the tensor")
 
     def _create_tensor(self, shape, fill):
         if len(shape) <= 0:
@@ -177,3 +177,25 @@ class NDimensionTensor:
             print(result)
             result.partial_filing([[y,y+self.shape[dimension]] if x == dimension else [0,y] for x,y in enumerate(tensor.shape)], self)
         return result
+
+    @classmethod
+    def ToTensor(cls, data):
+        if isinstance(data, list):
+            new_shape = []
+            _ = data
+            while not isinstance (_, int):
+                new_shape.append(len(_))
+                _ = _[0]
+            new_tensor = NDimensionTensor(new_shape)
+            indexes = new_tensor._get_combination([[0,i] for i in new_shape])
+            for i in indexes:
+                filing = data
+                for j in i:
+                    filing = filing[j]
+                new_tensor.partial_filing(i,filing)
+            return new_tensor
+        else:
+            raise ValueError ("You can only convert a list to a tensor")
+
+
+
