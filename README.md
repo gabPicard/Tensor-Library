@@ -26,14 +26,27 @@ To do so, you simply have to call the NDimensionalTensor class with the correct 
   t1 = NDimensionalTensor(shape)
   ```
   If no shape is indicated, the class will create an empty tensor by default 
-- The "filling": it is what will be filling the tensor in a first instance. It can either be an integer, in wich case the entire tensor will be filled with this number, or a set of point
-  > Note: the second case is not finished yet. Only the integer works for now
+- The "filling": it is what will be filling the tensor in a first instance. For a more simple use, it can only be an integer.
   
   To create a 3x4x1 tensor filled with the number 1, we write:
   ```python
   t1 = NDimensionalTensor([3,4,1], 1)
   ```
   If no filling is indicated, the tensor will be filled with 0 by default
+  
+### Converting a list to a tensor
+
+To convert an already existing list to a tensor, you can use the class method ToTensor. 
+
+To use it, you simply have to use the list as the argument:
+
+```python
+
+matrix = [[1,2,3],[4,5,6],[7,8,9]]
+tensor = NDimensionTensor.ToTensor(matrix)
+
+```
+> Note: the list must have a "coherent" shape for the conversion to work.
 
 ### Navigating a tensor
 
