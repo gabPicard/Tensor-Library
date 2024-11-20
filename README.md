@@ -110,11 +110,11 @@ The *extract_tensor* function allows you to access specific set of elements insi
 
 For example: let's say that we have a 5 by 5 matrix, and we want to extract all the element wich are not on the edges. This can be rewritten as all the elements from lines 2 to 4, and columns 2 to 4. We can write:
 ```python
-elements = matrix.extract_tensor([[1,3],[1,3])
+elements = matrix.extract_tensor([[1,3],[1,3]])
 ```
 If you want the same thing, but only the line in the middle (the 3rd one), you can call the function indicating only the 3rd line, and the columns from 2 to 4 (included). It looks like this:
 ```python
-third_line = matrix.extract_tensor([2,[1,3])
+third_line = matrix.extract_tensor([2,[1,3]])
 ```
 > Note: You can only extract tensors. For example, if you wanted to do the opposite as before, wich would be extracting the border of the matrix instead of the inside, it wouldn't be possible: you would end up with a tensor with an empty middle
 
@@ -161,5 +161,6 @@ Will write this section later
 
 ### License
 
-Didn't work on it yet
+This project falls under the MIT license
+
     
