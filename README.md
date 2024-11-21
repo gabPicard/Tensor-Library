@@ -157,10 +157,13 @@ fused_matrixes = m1.concatenante(m2,1,"front")
 
 ### Contribution
 
-Will write this section later
+Everything in this library was entirely made by me, [Gabriel Picard](https://github.com/gabPicard).
+I used [this documentation](https://packaging.python.org/en/latest/tutorials/packaging-projects/) and [this youtube video](https://www.youtube.com/watch?v=zhpI6Yhz9_4&t=372s) to learn how to make the package and publish it.
 
 ### License
 
 This project falls under the MIT license
 
-    
+### Version
+
+Version 0.9.0 - Test release on TestPypi  
