@@ -71,6 +71,10 @@ class NDimensionTensor:
         result.tensor = self._recursive_addition(self.tensor, tensor.tensor, -1)
         return result
     
+    def __len__(tensor):
+        if isinstance(tensor, NDimensionTensor):
+            return tensor.shape[0]
+    
     def _recursive_addition(self, data1, data2, sign):
         if isinstance (data1, list):
             return [self._recursive_addition(subdata1, subdata2, sign) for subdata1, subdata2 in zip(data1, data2)]    
@@ -196,6 +200,9 @@ class NDimensionTensor:
             return new_tensor
         else:
             raise ValueError ("You can only convert a list to a tensor")
-
-
+        
+    @classmethod
+    def rank(cls, tensor):
+        if isinstance(tensor, NDimensionTensor):
+            return len(tensor.shape)
 
