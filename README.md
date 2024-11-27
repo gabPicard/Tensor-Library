@@ -2,11 +2,15 @@
 
 The Tensor Library is a Python package made to manage n-dimensional arrays: tensors. The package implements different functions to make the manipulation of a tensor easier: creation, navigation, addition and substraction, modification, etc...
 
-This library is a personnal project I made to learn more about Python and the maths behind the tensors. I wouldn't recommend using it, as it is nor perfect or optimized. Furthermore, there already exist a lot of better made packages, such as [numpy](numpy.org), wich provide much more utility.
+This library is a personal project I made to learn more about Python and the maths behind the tensors. I wouldn't recommend using it, as it is neither perfect nor optimized. Furthermore, there already exist a lot of better made packages, such as [numpy](numpy.org), which provide much more utility.
 
-## Installing the Tensor Library
+## Installing the Tensor 
 
-Didn't work on it yet
+You can find the library [here](https://pypi.org/project/TensorLibrary/1.0.0/#description), or directly download it using this command:
+
+```
+pip install TensorLibrary==1.0.0
+```
 
 ## Using the Tensor Library
 
@@ -26,7 +30,7 @@ To do so, you simply have to call the NDimensionalTensor class with the correct 
   t1 = NDimensionalTensor(shape)
   ```
   If no shape is indicated, the class will create an empty tensor by default 
-- The "filling": it is what will be filling the tensor in a first instance. For a more simple use, it can only be an integer.
+- The "filling": this specifies the initial value to fill the tensor. For a more simple use, it can only be an integer.
   
   To create a 3x4x1 tensor filled with the number 1, we write:
   ```python
@@ -75,7 +79,7 @@ The printing function works as usual:
 ```python
 print(t1)
 ```
-> Note: The printing function has a special visual for matrixes. Any dimension superior to 2 will have a classic visual
+> Note: The printing function has a special visual for matrices. Any dimension greater to 2 will have a standard visual
 
 ### Basic manipulation of a tensor
 
@@ -90,7 +94,7 @@ matrix = NDimensionTensor([3,3])
 matrix[1] = 1
 ```
 Here, all lines will be filled with 0 by default, but we set the entire middle line as 1.
-> Note: As mentionned before, you can only do this if you call the dub-dimension in order. I changed here a line, but I am not able to change a column. To do so, we will have to use the *partial_filing* function that we will discuss later
+> Note: As mentioned before, you can only do this if you call the sub-dimension in order. I changed here a line, but I am not able to change a column. To do so, we will have to use the *partial_filing* function that we will discuss later
 
 The addition and substraction functions also work by default. You can simply use the mathematical symbols:
 ```python
@@ -106,7 +110,7 @@ We saw earlier that you couldn't access or set a comun in a tensor, because you 
 
 #### extract_tensor
 
-The *extract_tensor* function allows you to access specific set of elements inside a tensor without being limited by the order of the sub-division. To use it, you must use an array of array, wich indicates the area we will be modifying. 
+The *extract_tensor* function allows you to access specific set of elements inside a tensor without being limited by the order of the sub-division. To use it, you must use an array of arrays, wich specifies the area to be modified. 
 
 For example: let's say that we have a 5 by 5 matrix, and we want to extract all the element wich are not on the edges. This can be rewritten as all the elements from lines 2 to 4, and columns 2 to 4. We can write:
 ```python
@@ -116,7 +120,7 @@ If you want the same thing, but only the line in the middle (the 3rd one), you c
 ```python
 third_line = matrix.extract_tensor([2,[1,3]])
 ```
-> Note: You can only extract tensors. For example, if you wanted to do the opposite as before, wich would be extracting the border of the matrix instead of the inside, it wouldn't be possible: you would end up with a tensor with an empty middle
+> Note: You can only extract tensors. For example, if you wanted to do the opposite as before, wich would be extracting the border of the matrix instead of the inside, it wouldn't be possible because you would end up with a tensor containing an empty middle
 
 #### partial_filing
 
@@ -133,13 +137,13 @@ matrix = NDimensionTensor([5,5])
 smaller_matrix = NDimensionTensor([3,3],1)
 matrix.partial_filing([[1,3],[1,3]],smaller_matrix)
 ```
-> Note: the specified indexes must matches with the shape of the tensor used for filling
+> Note: the specified indexes must match the shape of the tensor used for filling
 
 #### concatenate
 
 The *concatenate* function allows use to "fuse" two tensors together. To use this function, you have to specify the second tensor, the dimension that will be expanded, and wich tensor will go in front of the other.
 
-For example: we have two 3 by 3 matrixes, one filled with 1, and the other with 2. If we want to put the one filled with 2 on the bottom of the other, we would have to write:
+For example: we have two 3 by 3 matrices, one filled with 1, and the other with 2. If we want to put the one filled with 2 on the bottom of the other, we would have to write:
 ```python
 m1 = NDimensionTensor([3,3],1)
 m2 = NDimensionTensor([3,3],2)
@@ -166,4 +170,4 @@ This project falls under the MIT license
 
 ### Version
 
-Version 0.9.0 - Test release on TestPypi  
+Version 1.0.0 - First release on PyPi
